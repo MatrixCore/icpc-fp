@@ -124,19 +124,49 @@ let commaSprinkler (input:string) =
 
 
 
+let checkInvalidChar (input : string) = 
+    let charArr = input.ToCharArray();  
+    let charList = charArr |> Array.toList
+    let rec checkChar  = function
+            | [] -> false
+            | hd :: tl ->
+                match ((hd = ' ') && ((nextCharElem tl) = ' ')) with 
+                    | true -> true 
+                    | _ -> checkChar tl
 
+    checkChar charList
 
+let checkInvalidChar2 (input : string) = 
+    let charArr = input.ToCharArray();  
+    let charList = charArr |> Array.toList
+    let rec checkChar  = function
+            | [] -> false
+            | hd :: tl ->
+                match (Char.IsLetter(hd) || hd = ' ')  with 
+                    | false -> true 
+                    | _ -> checkChar tl
 
+    checkChar charList
 
+let checkInvalidChar3 (input : string) = 
+    let charArr = input.ToCharArray();  
+    let charList = charArr |> Array.toList
+    let rec checkChar  = function
+            | [] -> false
+            | hd :: tl ->
+                match (Char.IsLetter(hd) || hd = ' ')  with 
+                    | false -> true 
+                    | _ -> checkChar tl
 
+    checkChar charList
 
+let rivers (input : string) =
 
+    let stringList = makeList input
 
-
-
-
-let rivers input =
-    failwith "Not implemented"
+    match (input.Length > 80) || (stringList.Length < 2) || (checkInvalidChar input) || (checkInvalidChar2 input) || input.Substring(0) <> " " ||input.Substring(input.Length - 1) <> " " with 
+        |true -> None 
+        |_ -> Some("turkey")
 
 [<EntryPoint>]
 let main argv =
