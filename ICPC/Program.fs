@@ -90,8 +90,6 @@ let noWhiteSpace (input : string) =
                     | _ -> checkSpace tl
 
     checkSpace charList
-    
-//((hd = ' ') && ((nextCharElem tl) = ' '))
 
 
 let commaSprinkler (input:string) =
@@ -112,19 +110,7 @@ let commaSprinkler (input:string) =
      
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-let checkInvalidChar (input : string) = 
+let checkInvalidChar (input : string) = // test to see if two consecutive whitespaces are present in the string
     let charArr = input.ToCharArray();  
     let charList = charArr |> Array.toList
     let rec checkChar  = function
@@ -136,7 +122,7 @@ let checkInvalidChar (input : string) =
 
     checkChar charList
 
-let checkInvalidChar2 (input : string) = 
+let checkInvalidChar2 (input : string) =  // test to see whether a character in the input string is invalid (ie anything other than a letter or whitespace)
     let charArr = input.ToCharArray();  
     let charList = charArr |> Array.toList
     let rec checkChar  = function
@@ -148,25 +134,15 @@ let checkInvalidChar2 (input : string) =
 
     checkChar charList
 
-let checkInvalidChar3 (input : string) = 
-    let charArr = input.ToCharArray();  
-    let charList = charArr |> Array.toList
-    let rec checkChar  = function
-            | [] -> false
-            | hd :: tl ->
-                match (Char.IsLetter(hd) || hd = ' ')  with 
-                    | false -> true 
-                    | _ -> checkChar tl
 
-    checkChar charList
 
-let stringLen (input : string list) = List.exists (fun (elem : string) -> elem.Length > 80) input
+let stringLen (input : string list) = List.exists (fun (elem : string) -> elem.Length > 80) input //test to see if any of the words in the input string are over 80 characters
 
 let rivers (input : string) =
-    let stringList = makeList input
-    match (stringList.Length < 2) || (checkInvalidChar input) || (checkInvalidChar2 input) || input.Substring(0, 1) = " " ||input.Substring(input.Length - 1) = " " || stringLen stringList with 
-        |true -> None
-        |_ -> Some(10, 10)
+    let stringList = makeList input // create a string list from our strin input
+    match (stringList.Length < 2) || (checkInvalidChar input) || (checkInvalidChar2 input) || input.Substring(0, 1) = " " ||input.Substring(input.Length - 1) = " " || stringLen stringList with //pattern match all our tests
+        |true -> None //if it is an error
+        |_ -> Some(10, 10) // dummy code to ensure that legitimate input passes - this is where the word will be
 
 [<EntryPoint>]
 let main argv =
