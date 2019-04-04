@@ -160,13 +160,13 @@ let checkInvalidChar3 (input : string) =
 
     checkChar charList
 
+let stringLen (input : string list) = List.exists (fun (elem : string) -> elem.Length > 80) input
+
 let rivers (input : string) =
-
     let stringList = makeList input
-
-    match (input.Length > 80) || (stringList.Length < 2) || (checkInvalidChar input) || (checkInvalidChar2 input) || input.Substring(0) <> " " ||input.Substring(input.Length - 1) <> " " with 
-        |true -> None 
-        |_ -> Some("turkey")
+    match (stringList.Length < 2) || (checkInvalidChar input) || (checkInvalidChar2 input) || input.Substring(0, 1) = " " ||input.Substring(input.Length - 1) = " " || stringLen stringList with 
+        |true -> None
+        |_ -> Some(10, 10)
 
 [<EntryPoint>]
 let main argv =
