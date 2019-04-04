@@ -46,7 +46,7 @@ let findStringContaining2 (text : string) (items : string list) =
     items |> List.tryFind(fun item -> item.Contains(text));;
 
 
-let rec firstRequirement test (listin : string list) = match listin with 
+let rec firstRequirement test (listin : string list) = match listin with //modifying our string list to comply with rule 1
                                                         | [] -> []
                                                         | hd :: tl ->
                                                             match hd.Substring((hd.Length - 1)) = "," || hd.Substring((hd.Length - 1)) = "." with // see whether the word in question ends with a comma or full stop - if it does, no modification will be necessary as the next word will either be the first word of a sentence or already preceded by a comma
@@ -56,7 +56,7 @@ let rec firstRequirement test (listin : string list) = match listin with
                                                                             | _ -> hd + ","::firstRequirement test tl // next word is a target word, therefore modify
 
 
-let rec secondRequirement test (listin : string list) = match listin with 
+let rec secondRequirement test (listin : string list) = match listin with //modifying our string list to comply with rule 2
                                                         | [] -> []
                                                         | hd :: tl -> match hd.Substring((hd.Length - 1)) = "," || hd.Substring((hd.Length - 1)) = "." with // see whether the word in question ends with a comma or full stop - if it does, no modification will be necessary as the next word will either be the first word of a sentence or already preceded by a comma
                                                                         | true -> hd::secondRequirement test tl
@@ -65,19 +65,33 @@ let rec secondRequirement test (listin : string list) = match listin with
                                                                                 | None -> hd::secondRequirement test tl // no modification needed as next word is not a target word
                                                                                 | _ -> hd + ","::secondRequirement test tl // next word is a target word, therefore modify
 
-let rec endsWithFullstop (input : string ) = 
+let rec endsWithFullstop (input : string ) =  // test to see if input ends with a fullstop 
     match input.Substring((input.Length - 1)) = "." with
             | true -> false
             | _ -> true 
 
-let rec startsWithLetter (input : string) =
+let rec startsWithLetter (input : string) = // the test to see if the input starts with a letter
     match Char.IsLetter(input, 0) with 
         | true -> false
         | _ -> true
 
+let nextCharElem  = function //Access the next element in the list 
+    | [] -> ' '
+    | hd :: tl -> hd
 
-//let rec noWhiteSpace (input : string)
+let noWhiteSpace (input : string) = 
+    let charArr = input.ToCharArray();  
+    let charList = charArr |> Array.toList
+    let rec checkSpace  = function
+            | [] -> false
+            | hd :: tl ->
+                match (hd = '?') || ((hd = ' ') && ((nextCharElem tl) = ' ')) || ((hd = '.') && ((nextCharElem tl) = '.')) || Char.IsUpper(hd) || ((hd = ',') && ((nextCharElem tl) <> ' ')) || ((hd = ' ') && ((nextCharElem tl) = '.')) with 
+                    | true -> true 
+                    | _ -> checkSpace tl
 
+    checkSpace charList
+    
+//((hd = ' ') && ((nextCharElem tl) = ' '))
 
 
 let commaSprinkler (input:string) =
@@ -92,7 +106,7 @@ let commaSprinkler (input:string) =
                 match result = inp with // check to see whether we need to go again 
                             | true -> result
                             | _ -> recurseSprinkler result
-    match (input.Length < 2) || (endsWithFullstop input) || (startsWithLetter input) with //Test for all the error cases
+    match (input.Length < 2) || (endsWithFullstop input) || (startsWithLetter input) || (noWhiteSpace input) with //Test for all the error cases
         | true -> None 
         | _ -> Some(recurseSprinkler input)
      
