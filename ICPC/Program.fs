@@ -101,9 +101,9 @@ let commaSprinkler (input:string) =
                 let updatedInput = firstRequirement morepostCommaWords listy // test each word in our string list against the list of preceded by comma target words, make changes accordingly
                 let part2 = secondRequirement preCommaWords updatedInput // test each word in our string list against the list of succeeded by comma target words, make changes accordingly
                 let result = String.concat " " part2 // create a string output of our string list which has had the rules applied to it
-                match result = inp with // check to see whether we need to go again 
-                            | true -> result
-                            | _ -> recurseSprinkler result
+                match result = inp with // check to see whether we need to go again (if the string result is the same as inp, then we know that our attempts to insert new commas did not succeed, therefore nothing left to do
+                            | true -> result // return the current version of the string if no more comma modifications are possible
+                            | _ -> recurseSprinkler result // there could still be further comma insertions, so go again
     match (input.Length < 2) || (endsWithFullstop input) || (startsWithLetter input) || (noWhiteSpace input) with //Test for all the error cases
         | true -> None 
         | _ -> Some(recurseSprinkler input)
