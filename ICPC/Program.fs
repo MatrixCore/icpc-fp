@@ -1,12 +1,10 @@
 ﻿module ICPC
 open System
 open System.Linq
-
-let commaSprinkler (input : string) =
+    
+let commaSprinkler input =
     failwith "Not implemented"
 
-    
-     
 
 let rivers (input : string) =
     //(LineWidth, RiverLength)
@@ -18,15 +16,15 @@ let rivers (input : string) =
 
     let widthFormat (strInput : string) width = 
     //Function to break up the input string into a list of substrings based on a word width
-        let rec format rest final str count =
+        let rec format rest final (str : string) count =
             match rest with 
             | [] -> final //Return the final string list
             | word::rest -> match count = width with
-                            | true -> format rest final@[str.trim()] "" 0 //Add string to the final list and reset str and the counter 
+                            | true -> format rest (final@[str.Trim()]) "" 0 //Add string to the final list and reset str and the counter 
                             | false -> format rest final (str + " " + word) (count + 1)
                             // Concatitate the current word with the carried over string and increment the counter
 
-        wordList = Array.toList(strInput.Split(' ')) //Split entire input into a list of single words
+        let wordList = Array.toList(strInput.Split(' ')) //Split entire input into a list of single words
         format wordList [] "" 0
 
 
@@ -45,7 +43,7 @@ let rivers (input : string) =
 
 
     let findAllSpaces (str : string) = //Finds all ' ' characters that appear in a single string and returns a list of indexes
-        let rec findSpaces str listSpace =
+        let rec findSpaces (str : string) (listSpace : int[]) =
             match str.IndexOf(' ') with
             | -1 -> listSpace //If there are no more spaces in this string, return the list of indexes of spaces in the given string 
             | num -> findSpaces (str.Substring num) listSpace@num //If there are still spaces to find, recurse
@@ -56,7 +54,7 @@ let rivers (input : string) =
     let findRiverLength = failwith "Not done"
             
 
-    let checkDoubleSpace spaceList = //Returns true if there are two ' ' characters next to each other
+    let checkDoubleSpace (spaceList : int[]) = //Returns true if there are two ' ' characters next to each other
         let checkSpace rest previous =
             match rest with
             | [] -> false
@@ -67,10 +65,11 @@ let rivers (input : string) =
         let first::rest = spaceList 
         checkSpace rest first
 
-    let validString input = 
-        match a = input.Split(' ').Length < 2 with //Checks if there is more than a single word in the supplied 
+    let validString (input : string) = 
+        let list = input.Split(' ').ToList()
+        match list.Count < 2 with //Checks if there is more than a single word in the supplied 
         | true -> false
-        | false -> match a.Max > 80 with //Checks if a single world is greater than 80 characters
+        | false -> match list |> List.map(fun x -> x.Length) with //Checks if a single world is greater than 80 characters
                    | true -> false
                    | false -> match (findAllSpaces input) |> checkDoubleSpace with //Looks for double spaces in the supplied string
                               | true -> false
