@@ -2,7 +2,7 @@ module ICPC.Tests
 
 open NUnit.Framework
 open FsUnit
-
+(*
 [<Test>]
 let ``Comma sprinkler, input 1`` () =
     commaSprinkler "please sit spot. sit spot, sit. spot here now here."
@@ -46,7 +46,9 @@ let ``Comma sprinkler, error case 4`` () =
 let ``Comma sprinkler, error case 5`` () =
         commaSprinkler "one, two. one tree. " |> should equal None
         commaSprinkler "one, two. one tree, " |> should equal None
-        commaSprinkler "one, two. one tree " |> should equal None
+        commaSprinkler "one, two. one tree " |> should equal None 
+        
+*)
 
 [<Test>]
 let ``Rivers, input 1`` () =
