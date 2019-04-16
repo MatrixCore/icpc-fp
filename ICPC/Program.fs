@@ -6,6 +6,7 @@ let commaSprinkler input =
     failwith "Not implemented"
 
 
+
 let rivers (input : string) =
     //(LineWidth, RiverLength)
     let compareRivers (a,b) (c,d) = //Returns the river that longest width
@@ -20,11 +21,15 @@ let rivers (input : string) =
 
     //Fix this
     let findAllSpaces (input : string) = //Finds all ' ' characters that appear in a single string and returns a list of indexes
-        let rec findSpaces (str : string) (listSpace : int list) =
-            match str.IndexOf(' ') > 0 with
-            | false -> listSpace //If there are no more spaces in this string, return the list of indexes of spaces in the given string 
-            | true -> findSpaces (str.Substring (str.IndexOf(' '))) listSpace@[str.IndexOf(' ')] //If there are still spaces to find, recurse
-        findSpaces input []
+        let charList = Array.toList(input.ToCharArray())
+        let rec space count (charL : char list) (spaceList : int list) =
+            match count = (charL.Length - 1) with
+            | true -> spaceList
+            | false -> match charL.Item(count) = ' ' with
+                       | true -> space (count + 1) charL (spaceList@[count])
+                       | false -> space (count + 1) charL spaceList
+
+        space 0 charList []
 
     //Simply this function using the already created findAllSpaces int list
     let checkDoubleSpace spaceList = //Returns true if there are two ' ' characters next to each other
@@ -51,7 +56,7 @@ let rivers (input : string) =
     let validString (input : string) = 
         match input.Split(' ').Length < 2 with //Checks if there is more than a single word in the supplied 
         | true -> false
-        | false -> match checkChar input with
+        | false -> match checkChar input with //Looks for
                    | false -> false
                    | true -> match Array.exists(fun (elem : string) -> elem.Length > 80) (input.Split(' ')) with //Checks if a single world is greater than 80 characters
                              | true -> false
@@ -63,17 +68,27 @@ let rivers (input : string) =
 
 
     let calcRiver (spaceList : int list) = ()
-    //ToDo
-
-    //DO the weird line width calcualtion to find the relative space postions 
-    
-
-    match validString input = true with
-    | false -> None
-    | _ -> //Call the other functions
-           Some(input |> findAllSpaces |> calcRiver)
         
 
+    let findRiver (spaceList : int list) width =
+        let count = 1
+        let pos = 0
+
+        let diff = ((spaceList.Item(pos + width) - spaceList.Item((width - 1) * count)) - spaceList.Item(pos))
+        //weird line calculation to find the relative space postions 
+        match diff > 2 && diff < -2 with
+        | false -> ()// Not a river
+        | true -> () // Forms a valid river, find a way to store river values
+                     // Also check if the last index is in the list already
+        //Maybe a list of river tuples (riverLength, lastSpaceIndex)?
+
+    
+    
+    match validString input with
+    | false -> None
+    | _ -> //Call the other functions
+           Some(input |> findAllSpaces |> findRiver)
+           
 [<EntryPoint>]
 let main argv =
     printfn "Hello World from F#!"
